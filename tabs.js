@@ -37,21 +37,61 @@ const tabs = [
   },
 ];
 
+// Function to set the active tab
+/**
+ * @param {string} tabId - The id of the tab
+ * @param {number} idx - The index of the tab
+ */
+function setActiveTab(tabId, idx) {
+  /** @type {NodeListOf<HTMLButtonElement>} */
+  const tabHeaders = document.querySelectorAll(".tab-header");
+  /**  @type {NodeListOf<HTMLDivElement>} */
+  const tabContents = document.querySelectorAll(".tab-content");
+
+  tabHeaders.forEach((tabHeader) => {
+    if (tabHeader.dataset.tab === tabId) {
+      tabHeader.classList.add("active");
+    } else {
+      tabHeader.classList.remove("active");
+    }
+  });
+
+  tabContents.forEach((tabContent) => {
+    tabContent.style.transform = `translateX(-${idx * 100}%)`;
+    if (tabContent.dataset.tab === tabId) {
+      tabContent.classList.add("active");
+    } else {
+      tabContent.classList.remove("active");
+    }
+  });
+}
+
 function main() {
+  /**  @type {NodeListOf<HTMLDivElement>} */
   const tabsHeaders = document.querySelector(".tabs-headers");
+  /**  @type {NodeListOf<HTMLDivElement>} */
   const tabsContents = document.querySelector(".tabs-contents");
 
-  tabs.forEach((tab) => {
+  tabs.forEach((tab, i) => {
     const tabHeader = document.createElement("button");
     tabHeader.classList.add("tab-header");
     tabHeader.textContent = tab.title;
+    tabHeader.dataset.tab = tab.id;
     tabsHeaders.appendChild(tabHeader);
+
+    tabHeader.addEventListener("click", () => {
+      setActiveTab(tab.id, i);
+    });
 
     const tabContent = document.createElement("div");
     tabContent.classList.add("tab-content");
     tabContent.innerHTML = tab.content;
+    tabContent.dataset.tab = tab.id;
     tabsContents.appendChild(tabContent);
   });
+
+  // default selected tab
+  setActiveTab(tabs[0].id, 0);
 }
 
 document.addEventListener("DOMContentLoaded", main);
