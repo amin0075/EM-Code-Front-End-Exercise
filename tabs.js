@@ -75,6 +75,8 @@ function main() {
   const tabsHeaders = document.querySelector(".tabs-headers");
   /**  @type {NodeListOf<HTMLDivElement>} */
   const tabsContents = document.querySelector(".tabs-contents");
+  let touchstartX = 0;
+  let touchendX = 0;
 
   tabs.forEach((tab, i) => {
     const tabHeader = document.createElement("button");
@@ -93,6 +95,42 @@ function main() {
     tabContent.dataset.tab = tab.id;
     tabsContents.appendChild(tabContent);
   });
+
+  /**
+   * @param {TouchEvent} event - The touch event
+   * @param {"start" | "end"} state - The type of the touch event
+   */
+  function handleSwipe(event, state) {
+    const currentActiveTab = document.querySelector(".tab-header.active");
+    if (state === "start") {
+      touchstartX = event.changedTouches[0].screenX;
+    } else {
+      touchendX = event.changedTouches[0].screenX;
+      const idx = tabs.findIndex(
+        (tab) => tab.id === currentActiveTab.dataset.tab
+      );
+
+      if (touchendX < touchstartX && idx < tabs.length - 1) {
+        setActiveTab(tabs[idx + 1].id, idx + 1);
+      }
+
+      if (touchendX > touchstartX && idx > 0) {
+        setActiveTab(tabs[idx - 1].id, idx - 1);
+      }
+    }
+  }
+
+  tabsContents.addEventListener(
+    "touchstart",
+    (e) => handleSwipe(e, "start"),
+    false
+  );
+
+  tabsContents.addEventListener(
+    "touchend",
+    (e) => handleSwipe(e, "end"),
+    false
+  );
 
   // default selected tab
   setActiveTab(tabs[0].id, 0);
