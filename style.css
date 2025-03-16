@@ -9,6 +9,7 @@
   --secondary-color: hsl(200, 18%, 90%);
   --text-color: hsl(213, 69%, 24%);
   --spacing: 0.3rem;
+  --max-tabs-content-height: 500px;
 }
 
 body {
@@ -17,6 +18,16 @@ body {
   min-height: 100vh;
   width: 100%;
   color: var(--text-color);
+}
+
+.prose p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-bottom: calc(var(--spacing) * 3);
 }
 
 .container {
@@ -71,6 +82,8 @@ body {
   background-color: white;
   overflow-x: hidden;
   box-shadow: 0px 2px 4px 0px rgb(0 0 0 / 10%);
+  max-height: var(--max-tabs-content-height);
+  overflow-y: auto;
 }
 
 .tabs .tabs-contents .tab-content {

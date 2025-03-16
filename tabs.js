@@ -51,6 +51,10 @@ function setActiveTab(tabId, idx) {
   tabHeaders.forEach((tabHeader) => {
     if (tabHeader.dataset.tab === tabId) {
       tabHeader.classList.add("active");
+      tabHeader.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
     } else {
       tabHeader.classList.remove("active");
     }
@@ -84,7 +88,7 @@ function main() {
     });
 
     const tabContent = document.createElement("div");
-    tabContent.classList.add("tab-content");
+    tabContent.classList.add("tab-content", "prose");
     tabContent.innerHTML = tab.content;
     tabContent.dataset.tab = tab.id;
     tabsContents.appendChild(tabContent);
